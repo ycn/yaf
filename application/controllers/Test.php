@@ -31,5 +31,30 @@ class TestController extends Yaf_Controller_Abstract {
         $this->getResponse()->setBody("page=".$page.", size=".$size);
         return False;
     }
+
+    public function testDbAction() {
+        $params = $this->getRequest()->getParams();
+        $username = isset($params['username']) ? $params['username'] : '';
+
+        $result = array();
+
+        if (!empty($username)) {
+
+            $db = Yaf_Registry::get("db");
+            $st = $db->prepare("
+                    SELECT *
+                    FROM ADF_USER
+                    WHERE username=:username
+                    ");
+            $st->bindParam(':username', $username, PDO::PARAM_STR);
+            $st->execute();
+            $result = $st->fetch(PDO::FETCH_ASSOC);
+            $st->closeCursor();
+        }
+
+        header("Content-type: application/json");
+        $this->getResponse()->setBody(json_encode($result));
+        return False;
+    }
 }
 ?>
