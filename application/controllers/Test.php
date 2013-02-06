@@ -43,7 +43,7 @@ class TestController extends Yaf_Controller_Abstract {
             $db = Yaf_Registry::get("db");
             $st = $db->prepare("
                     SELECT *
-                    FROM user
+                    FROM ADF_USER
                     WHERE username=:username
                     ");
             $st->bindParam(':username', $username, PDO::PARAM_STR);
